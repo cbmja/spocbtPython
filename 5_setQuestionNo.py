@@ -18,7 +18,7 @@ def add_questionno_to_all_spans(input_dir, output_dir):
     """
     특정 left 속성을 가진 div 안의 모든 span 태그 중
     "숫자."로 시작하는 문자열에 data-questionno 속성을 추가
-    """
+    """ 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)  # 출력 폴더 생성
     
