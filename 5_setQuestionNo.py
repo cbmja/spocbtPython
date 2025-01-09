@@ -15,7 +15,7 @@ left_conditions = [
 
 # 정규식을 사용하여 "숫자."로 시작하는 문자열 찾기
 # question_pattern = re.compile(r"^(\d+)\.")
-question_pattern = re.compile(r"^(\d+)$")
+question_pattern = re.compile(r"^(\d+)")
 
 def add_questionno_to_all_spans(input_dir, output_dir):
     """
