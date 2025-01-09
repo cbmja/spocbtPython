@@ -55,6 +55,7 @@ def add_questionno_to_all_spans(input_dir, output_dir):
                                 span["data-questionno"] = question_no  # 숫자만 추가
                                 question_counts[question_no] = question_counts.get(question_no, 0) + 1
                                 total_question_count += 1
+                                break
 
             # 수정된 파일 저장
             with open(output_path, "w", encoding="utf-8") as file:
