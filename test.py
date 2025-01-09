@@ -16,7 +16,8 @@ subject_map = {
     "운동처방론 (": "EPD",
     "기능해부학 (": "FA",
     "건강교육론 (": "HE",
-    "건강·체력평가 (": "HTA",
+    #"건강·체력평가 (": "HTA",
+    "체력평가 (": "HTA",
     "운동상해 (": "IE",
     "운 동 상 해 (": "IE",
     "병태생리학 (": "PA",
@@ -31,7 +32,8 @@ subject_map = {
 def add_subject_code_to_span(input_dir, output_dir):
     """
     HTML 파일의 <span> 태그에서 과목명을 검색하여
-    data-subjectcode 속성을 추가하고, 처리 통계를 TXT 파일에 저장.
+    data-subjectcode 속성을 추가하고, 중복되는 값 중 먼저 나오는 태그의
+    data-subjectcode 속성만 삭제. 통계에서도 반영.
     """
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)  # 출력 폴더 생성
@@ -49,13 +51,24 @@ def add_subject_code_to_span(input_dir, output_dir):
 
             subject_counts = {}
             total_count = 0
+            seen_subjectcodes = {}  # 중복 검사용 딕셔너리 {값: 해당 span}
 
             # <span> 태그만 처리
             for span in soup.find_all("span"):
                 if span.string:  # 텍스트가 있는 경우
                     for key, value in subject_map.items():
                         if key in span.string:
+                            # 중복 확인
+                            if value in seen_subjectcodes:
+                                # 이미 존재하는 경우, 이전 항목의 data-subjectcode 속성 제거
+                                del seen_subjectcodes[value]["data-subjectcode"]
+                                print(f"Removed data-subjectcode from: {seen_subjectcodes[value].string}")
+                                # 통계에서 -1
+                                subject_counts[value] -= 1
+                                total_count -= 1
+                            # 새 항목 추가
                             span["data-subjectcode"] = value
+                            seen_subjectcodes[value] = span  # 최신 항목 저장
                             subject_counts[value] = subject_counts.get(value, 0) + 1
                             total_count += 1
 
