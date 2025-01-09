@@ -8,7 +8,9 @@ left_conditions = [
     "left:3.545em;", "left:25.75em;",
     "left:3.5361em;", "left:36.4502em;",
     "left:2.5981em;", "left:31.6373em;",
-    "left:2.6em;", "left:31.66em;"
+    "left:2.6em;", "left:31.66em;",
+                   "left:31.655em;",
+                   "left:31.3em;"
 ]
 
 # 정규식을 사용하여 "숫자."로 시작하는 문자열 찾기
