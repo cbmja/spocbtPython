@@ -16,7 +16,7 @@ subject_map = {
     "운동처방론 (": "EPD",
     "기능해부학 (": "FA",
     "건강교육론 (": "HE",
-    "건강·체력평가 (": "HTA",
+    #"건강·체력평가 (": "HTA",
     "체력평가 (": "HTA",
     "운동상해 (": "IE",
     "운 동 상 해 (": "IE",
@@ -57,6 +57,7 @@ def add_subject_code_to_span(input_dir, output_dir):
                     for key, value in subject_map.items():
                         if key in span.string:
                             span["data-subjectcode"] = value
+                            print(span.string)
                             subject_counts[value] = subject_counts.get(value, 0) + 1
                             total_count += 1
 
