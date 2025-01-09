@@ -1,17 +1,41 @@
 import os
 from bs4 import BeautifulSoup
 
-def process_html_files(input_dir, output_dir):
+# 텍스트와 subject_code 매핑
+subject_map = {
+    "스포츠사회학 (": "SS",
+    "스포츠교육학 (": "SE",
+    "스포츠심리학 (": "SP",
+    "한국체육사 (": "KHS",
+    "운동생리학 (": "EP",
+    "운동역학 (": "EB",
+    "운 동 역 학 (": "EB",
+    "스포츠윤리 (": "SETH",
+    "장애인스포츠론 (": "APS",
+    "운동부하검사 (": "ELT",
+    "운동처방론 (": "EPD",
+    "기능해부학 (": "FA",
+    "건강교육론 (": "HE",
+    "건강·체력평가 (": "HTA",
+    "운동상해 (": "IE",
+    "운 동 상 해 (": "IE",
+    "병태생리학 (": "PA",
+    "유아체육론 (": "PAE",
+    "체육측정평가론 (": "PME",
+    "스포츠영양학 (": "SN",
+    "노인체육론 (": "SPA",
+    "특수체육론 (": "SPE",
+    "트레이닝론 (": "TRN"
+}
+
+def add_subject_code_to_span(input_dir, output_dir):
     """
-    span 태그에서 ①,②,③,④를 검색하여
-    - 하나만 포함된 경우: data-answerno="1", "2", "3", "4" 추가
-    - 둘 이상 포함된 경우: data-answerno="duplicate" 추가
-    처리 후 통계를 TXT 파일로 저장
+    HTML 파일의 <span> 태그에서 과목명을 검색하여
+    data-subjectcode 속성을 추가하고, 처리 통계를 TXT 파일에 저장.
     """
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)  # 출력 폴더 생성
 
-    answer_numbers = {'①': '1', '②': '2', '③': '3', '④': '4'}
     summary_lines = []
 
     for file_name in os.listdir(input_dir):
@@ -19,45 +43,29 @@ def process_html_files(input_dir, output_dir):
             input_path = os.path.join(input_dir, file_name)
             output_path = os.path.join(output_dir, file_name)
 
+            # 파일 읽기
             with open(input_path, "r", encoding="utf-8") as file:
                 soup = BeautifulSoup(file, "html.parser")
 
-            # 카운트 초기화
+            subject_counts = {}
             total_count = 0
-            count_1 = 0
-            count_2 = 0
-            count_3 = 0
-            count_4 = 0
-            count_duplicate = 0
 
+            # <span> 태그만 처리
             for span in soup.find_all("span"):
-                if span.string:
-                    text = span.string
-                    matches = [answer_numbers[char] for char in text if char in answer_numbers]
+                if span.string:  # 텍스트가 있는 경우
+                    for key, value in subject_map.items():
+                        if key in span.string:
+                            span["data-subjectcode"] = value
+                            subject_counts[value] = subject_counts.get(value, 0) + 1
+                            total_count += 1
 
-                    if len(matches) == 1:
-                        span["data-answerno"] = matches[0]
-                        if matches[0] == '1':
-                            count_1 += 1
-                        elif matches[0] == '2':
-                            count_2 += 1
-                        elif matches[0] == '3':
-                            count_3 += 1
-                        elif matches[0] == '4':
-                            count_4 += 1
-                    elif len(matches) > 1:
-                        span["data-answerno"] = "duplicate"
-                        count_duplicate += 1
-
-            total_count = count_1 + count_2 + count_3 + count_4 + count_duplicate
-
-            # HTML 파일 저장
+            # 수정된 파일 저장
             with open(output_path, "w", encoding="utf-8") as file:
                 file.write(str(soup))
 
-            # 결과를 summary_lines에 추가
-            summary_line = (f"{file_name} / totalCnt: {total_count} / 1cnt: {count_1} / 2cnt: {count_2} "
-                            f"/ 3cnt: {count_3} / 4cnt: {count_4} / duplicateCnt: {count_duplicate}")
+            # 통계 생성
+            subject_summary = " / ".join([f"{k}: {v}" for k, v in subject_counts.items()])
+            summary_line = f"{file_name} / totalCnt: {total_count} / {subject_summary}"
             summary_lines.append(summary_line)
 
             print(f"Processed: {file_name}")
@@ -70,7 +78,7 @@ def process_html_files(input_dir, output_dir):
     print(f"Summary file created at: {summary_path}")
 
 # 경로 설정
-input_dir = r"C:\\Users\\jeon\\Desktop\\온라인 자격증 시험\\html변환\\4. hidden 제거 [ html ]"
-output_dir = r"C:\\Users\\jeon\\Desktop\\온라인 자격증 시험\\html변환\\sample"
+input_dir = r"C:\\Users\\jeon\\Desktop\\온라인 자격증 시험\\html변환\\5. 보기 번호 data 부여 [ html ]"
+output_dir = r"C:\\Users\\jeon\\Desktop\\온라인 자격증 시험\\html변환\\6. 과목코드 data 부여 [ html ]"
 
-process_html_files(input_dir, output_dir)
+add_subject_code_to_span(input_dir, output_dir)
