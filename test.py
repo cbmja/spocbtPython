@@ -70,7 +70,7 @@ def process_html_files(input_dir, output_dir):
     print(f"Summary file created at: {summary_path}")
 
 # 경로 설정
-input_dir = r"C:\Users\jeon\Desktop\온라인 자격증 시험\html변환\4. hidden 제거 [ html ]"
-output_dir = r"C:\Users\jeon\Desktop\온라인 자격증 시험\html변환\5. 보기 번호 data 부여 [ html ]"
+input_dir = r"C:\\Users\\jeon\\Desktop\\온라인 자격증 시험\\html변환\\4. hidden 제거 [ html ]"
+output_dir = r"C:\\Users\\jeon\\Desktop\\온라인 자격증 시험\\html변환\\sample"
 
 process_html_files(input_dir, output_dir)

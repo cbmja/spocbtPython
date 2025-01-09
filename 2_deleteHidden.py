@@ -26,7 +26,7 @@ def update_html_visibility(input_dir, output_dir):
             print(f"Updated and saved: {output_path}")
 
 
-input_dir = r"C:\Users\jeon\Desktop\온라인 자격증 시험\html변환 시연\3. 워터마크 제거 후 html 변환 [ html ]"
-output_dir = r"C:\Users\jeon\Desktop\온라인 자격증 시험\html변환 시연\4. hidden 제거 [ html ]"
+input_dir = r"C:\Users\jeon\Desktop\온라인 자격증 시험\html변환\3. 워터마크 제거 후 html 변환 [ html ]"
+output_dir = r"C:\Users\jeon\Desktop\온라인 자격증 시험\html변환\4. hidden 제거 [ html ]"
 
 update_html_visibility(input_dir, output_dir)
